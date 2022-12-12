@@ -1,0 +1,35 @@
+services:
+
+ # Aplicacion 1
+ app1:
+  image: nginx:alpine
+  volumes:
+   # html de ejemplo
+   - ./example1:/usr/share/nginx/html
+  labels:
+   # enruta la aplicacion 1 con app1.docker.localhost
+   - "traefik.http.routers.app1.rule=Host(`app1.docker.localhost`)"
+
+ # Aplicacion 2
+ app2:
+  image: nginx:alpine
+  volumes:
+   # html de ejemplo
+   - ./example2:/usr/share/nginx/html
+  labels:
+   # enruta la aplicacion 2 con app2.docker.localhost
+   - "traefik.http.routers.app2.rule=Host(`app2.docker.localhost`)"
+
+ # Reverse proxy
+ reverse-proxy:
+  image: traefik:latest
+  # Activa la interfaz web y permite al contenedor de traefik escuchar a docker.
+  command: --api.insecure=true --providers.docker
+  ports:
+    # HTTP
+    - "80:80"
+    # Web UI (activado por --api.insecure=true)
+    - "8080:8080"
+  volumes:
+    # Permitir a traefik escuchar el eventos de Docker
+    - /var/run/docker.sock:/var/run/docker.sock
