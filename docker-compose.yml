@@ -31,5 +31,5 @@ services:
     # Web UI (activado por --api.insecure=true)
     - "8080:8080"
   volumes:
-    # Permitir a traefik escuchar el eventos de Docker
+    # Permitir a traefik escuchar eventos de Docker
     - /var/run/docker.sock:/var/run/docker.sock
